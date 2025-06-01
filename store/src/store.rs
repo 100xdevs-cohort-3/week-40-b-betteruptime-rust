@@ -1,4 +1,4 @@
-use std::{fmt::Error, sync::{Arc, Mutex}};
+use std::sync::{Arc, Mutex};
 
 use crate::config::Config;
 use diesel::{Connection, ConnectionError, PgConnection};

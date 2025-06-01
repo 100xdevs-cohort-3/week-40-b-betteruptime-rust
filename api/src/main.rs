@@ -1,5 +1,5 @@
 use input::CreateWebsite;
-use poem::{get, handler, listener::TcpListener, post, web::{self, Data, Json, Path}, EndpointExt, Route, Server};
+use poem::{get, handler, listener::TcpListener, post, web::{Data, Json, Path}, EndpointExt, Route, Server};
 use store::{models::website::Website, store::Store};
 pub mod input;
 
@@ -18,7 +18,7 @@ fn create_website(website_input: Json<CreateWebsite>, store: Data<&Store>) -> Js
 #[tokio::main]
 async fn main() -> Result<(), std::io::Error> {
     let store = Store::new().await.map_err(|e| {
-        std::io::Error::new(std::io::ErrorKind::Other, e)
+        std::io::Error::other(e)
     })?;
     let app = Route::new()
         .at("/status/:website_id", get(get_website))

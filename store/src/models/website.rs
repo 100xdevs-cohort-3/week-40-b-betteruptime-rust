@@ -1,6 +1,5 @@
-use std::time;
 
-use diesel::{data_types::PgTimestamp, prelude::{Insertable, Queryable}, RunQueryDsl, Selectable, SelectableHelper};
+use diesel::{prelude::{Insertable, Queryable}, RunQueryDsl, Selectable, SelectableHelper};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 use crate::store::Store;

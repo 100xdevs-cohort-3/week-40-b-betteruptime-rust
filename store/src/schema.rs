@@ -7,17 +7,16 @@ pub mod sql_types {
 }
 
 diesel::table! {
-    Region (id) {
+    region (id) {
         id -> Text,
         name -> Text,
     }
 }
 
 diesel::table! {
-    Website (id) {
+    website (id) {
         id -> Text,
         url -> Text,
-        #[sql_name="timeAdded"]
         time_added -> Timestamp,
     }
 }
@@ -26,7 +25,7 @@ diesel::table! {
     use diesel::sql_types::*;
     use super::sql_types::WebsiteStatus;
 
-    WebsiteTick (id) {
+    website_tick (id) {
         id -> Text,
         response_time_ms -> Int4,
         status -> WebsiteStatus,
@@ -35,11 +34,11 @@ diesel::table! {
     }
 }
 
-diesel::joinable!(WebsiteTick -> Region (region_id));
-diesel::joinable!(WebsiteTick -> Website (website_id));
+diesel::joinable!(website_tick -> region (region_id));
+diesel::joinable!(website_tick -> website (website_id));
 
 diesel::allow_tables_to_appear_in_same_query!(
-    Region,
-    Website,
-    WebsiteTick,
+    region,
+    website,
+    website_tick,
 );

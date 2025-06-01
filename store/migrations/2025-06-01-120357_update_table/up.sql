@@ -1,4 +1,4 @@
 -- Your SQL goes here
-
-ALTER TABLE "Website" 
-ALTER COLUMN "timeAdded" SET DEFAULT NOW();
+ALTER TABLE "website"
+ALTER COLUMN "time_added"
+SET DEFAULT NOW ();

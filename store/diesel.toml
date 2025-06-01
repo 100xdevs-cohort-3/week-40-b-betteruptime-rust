@@ -6,4 +6,6 @@ file = "src/schema.rs"
 custom_type_derives = ["diesel::query_builder::QueryId", "Clone"]
 
 [migrations_directory]
-dir = "/Users/harkiratsingh/Projects/betteruptime-rust/store/migrations"
+# dir = "/Users/harkiratsingh/Projects/betteruptime-rust/store/migrations"
+# useing relative path
+dir = "migrations"

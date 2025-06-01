@@ -1,4 +1,4 @@
 -- This file should undo anything in `up.sql`
-
-ALTER TABLE "Website" 
-ALTER COLUMN "timeAdded" DROP DEFAULT;
+ALTER TABLE "website"
+ALTER COLUMN "time_added"
+DROP DEFAULT;

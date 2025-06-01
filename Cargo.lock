@@ -45,6 +45,7 @@ dependencies = [
 name = "api"
 version = "0.1.0"
 dependencies = [
+ "dotenv",
  "poem",
  "serde",
  "store",
@@ -146,7 +147,10 @@ checksum = "c469d952047f47f91b68d1cba3f10d63c11d73e4636f24f08daf0278abf01c4d"
 dependencies = [
  "android-tzdata",
  "iana-time-zone",
+ "js-sys",
  "num-traits",
+ "serde",
+ "wasm-bindgen",
  "windows-link",
 ]
 
@@ -255,6 +259,12 @@ dependencies = [
  "block-buffer",
  "crypto-common",
 ]
+
+[[package]]
+name = "dotenv"
+version = "0.15.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "77c90badedccf4105eca100756a0b1289e191f6fcbdadd3cee1d2f614f97da8f"
 
 [[package]]
 name = "dsl_auto_type"
@@ -959,6 +969,7 @@ dependencies = [
 name = "store"
 version = "0.1.0"
 dependencies = [
+ "chrono",
  "diesel",
  "serde",
  "uuid",

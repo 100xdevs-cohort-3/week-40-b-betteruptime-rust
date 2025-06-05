@@ -3,7 +3,7 @@ use uuid::Uuid;
 
 pub mod models;
 
-pub use models::{Region, Website, WebsiteStatus, WebsiteTick};
+pub use models::{Region, Website};
 
 #[derive(Clone)]
 pub struct Store {
@@ -13,7 +13,6 @@ pub struct Store {
 impl Store {
     pub async fn new() -> Result<Self, sqlx::Error> {
         let database_url = std::env::var("DATABASE_URL").expect("DATABASE_URL must be set");
-        // let pool = PgPool::connect(&database_url).await?;
         let pool = PoolOptions::new()
             .max_connections(50)
             .connect(&database_url)

@@ -1,0 +1,12 @@
+[package]
+name = "notification"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+lettre = { version = "0.11", features = ["tokio1-native-tls"] }
+tokio = { version = "1", features = ["full"] }
+serde = { version = "1.0.219", features = ["derive"] }
+dotenv = "0.15.0"
+redis_lib = { version = "0.1.0", path = "../redis_lib" }
+uuid = { version = "1.17.0", features = ["v4"] }

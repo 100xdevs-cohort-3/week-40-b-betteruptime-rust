@@ -1,11 +1,12 @@
 use poem::{
     EndpointExt, Route, Server, get, handler,
     listener::TcpListener,
+    middleware::Cors,
     post,
     web::{Data, Json, Path, Query},
 };
 use redis_lib::RedisStore;
-use reqwest::Client as HttpClient;
+use reqwest::{Client as HttpClient, Method};
 use store::{
     Store,
     models::{Region, Website},
@@ -332,6 +333,12 @@ async fn main() -> Result<(), std::io::Error> {
     // HTTP client for InfluxDB queries
     let http_client = HttpClient::new();
 
+    let cors = Cors::new()
+        .allow_method(Method::GET)
+        .allow_method(Method::POST)
+        .allow_method(Method::PATCH)
+        .allow_method(Method::DELETE);
+
     let app = Route::new()
         .at("/websites", get(get_websites).post(create_website))
         .at(
@@ -344,6 +351,7 @@ async fn main() -> Result<(), std::io::Error> {
         .at("/monitor/:id", get(get_monitor_website))
         .at("/monitor/:id/downtime", get(get_downtime))
         .at("/monitor/:id/last_downtime", get(get_last_downtime))
+        .with(cors)
         .data(store)
         .data(redis)
         .data(influx_config)

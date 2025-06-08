@@ -1,71 +1,69 @@
-# 🌐 Website Monitoring App
+Website Monitoring App
 
-A **scalable**, **high-performance** website monitoring system inspired by [BetterStack](https://betterstack.com/) and [BetterUptime](https://betteruptime.com), designed to track the status and response times of millions of websites across multiple regions.
+A scalable, high-performance website monitoring system inspired by BetterStack and BetterUptime. Designed to track uptime and response times of millions of websites across multiple regions with detailed monitoring data and notification capabilities.
 
----
+✨ Features
 
-## 📖 Overview
+Add, update, and delete websites and regions via REST API
 
-This system continuously monitors website availability and performance, storing time-series data and sending notifications on downtime events. It is built using a modular architecture in **Rust**, providing efficiency, safety, and scalability.
+Website status checks every 3 minutes (Up/Down)
 
----
+Store time-series data (response times) in InfluxDB
 
-## 🧱 Architecture (Crates)
+Visualize performance metrics: response times vs. timestamps
 
-- **api**: RESTful API for managing websites, regions, and monitoring data. *(Built with [Poem](https://github.com/poem-web/poem))*
-- **store**: Interacts with PostgreSQL for metadata storage.
-- **redis_lib**: Manages Redis streams for task distribution and notification queues.
-- **worker**: Scalable workers that check website status every 3 minutes, store data in InfluxDB, and trigger notifications.
-- **cron**: Syncs PostgreSQL and Redis daily at midnight.
-- **notification**: Sends email alerts via SMTP for downtime events.
+Downtime detection with precise tracking
 
----
+Email notifications for downtime events
 
-## ⚙️ Technologies Used
+Monitor websites across multiple regions
 
-- **Rust**: High-performance systems programming.
-- **Poem**: Web framework for API development.
-- **PostgreSQL**: Stores metadata for websites and regions.
-- **Redis**: Task and notification queue (streams + consumer groups).
-- **InfluxDB**: Time-series storage for status and response times.
-- **Reqwest**: HTTP client for worker checks.
-- **Lettre**: SMTP email client.
-- **Tokio**: Asynchronous runtime.
-- **SQLx**: Asynchronous PostgreSQL client.
-- **Chrono**: Time/date utilities.
-- **Serde**: JSON serialization/deserialization.
-- **UUID**: Unique ID generator.
-- **Tokio-Cron-Scheduler**: Scheduled background jobs.
+Scalable worker architecture using Redis streams
 
----
+Daily sync between PostgreSQL and Redis queues
 
-## 🚀 Features
+🧰 Technologies Used
 
-- ✅ Add, update, delete websites and regions via REST API.
-- 🔍 Monitor website uptime/downtime and response times every 3 minutes.
-- 📈 Store time-series data for charting (1, 7, 30 days).
-- 📧 Email notifications on downtime events.
-- 🔁 Daily sync of websites between PostgreSQL and Redis.
-- 📊 Scalable architecture using Redis streams and worker pools.
+Rust: High-performance systems language
 
----
+Poem: Web framework for RESTful APIs
 
-## 📦 Setup Instructions
+PostgreSQL: Persistent metadata storage
 
-### 1. Prerequisites
+Redis: Stream-based job distribution
 
-Install the following:
+InfluxDB: Time-series storage of monitoring data
 
-- Rust
-- PostgreSQL
-- Redis
-- InfluxDB
+Reqwest: HTTP client for uptime checks
 
-### 2. Environment Variables
+Lettre: SMTP client for email alerts
 
-Create a `.env` file in the project root:
+Tokio: Async runtime
 
-```env
+SQLx: Async Postgres queries
+
+Chrono: Date and time handling
+
+Serde: JSON serialization
+
+UUID: Unique ID generation
+
+Tokio-Cron-Scheduler: Daily task scheduling
+
+🚀 Setup Instructions
+
+1. Install Dependencies
+
+Rust
+
+PostgreSQL
+
+Redis
+
+InfluxDB
+
+2. Environment Variables (.env)
+
 DATABASE_URL=postgres://user:password@localhost:5432/dbname
 REDIS_URL=redis://localhost:6379
 INFLUXDB_URL=http://localhost:8086
@@ -73,41 +71,108 @@ INFLUXDB_TOKEN=your-influxdb-token
 SMTP_HOST=smtp.example.com
 SMTP_USER=user@example.com
 SMTP_PASS=password
-3. Initialize Services
+INFLUXDB_ORG="website_ticks"
+
+3. Initialize Databases
+
 Run PostgreSQL migrations in store/migrations
 
-Create an InfluxDB bucket named website_ticks
+Create InfluxDB bucket: website_ticks
 
-4. Run Components
-bash
-Copy
-Edit
-cargo run --bin api           # Run the API server
-cargo run --bin worker        # Run the background workers
-cargo run --bin cron          # Run daily sync scheduler
-cargo run --bin notification  # Run the notification sender
-🔌 API Endpoints
-🌍 Website Management
-POST /websites — Create website
+4. Run Services
 
-GET /websites — List all websites
+cargo run --bin api
+cargo run --bin worker
+cargo run --bin cron
+cargo run --bin notification
 
-GET /websites/:id — Get specific website
+🔗 API Endpoints
 
-PATCH /websites/:id — Update website
+Websites
 
-DELETE /websites/:id — Delete website
+POST /websites: Add a websitePayload: { "url": "https://google.com", "name": "google" }
 
-🌐 Region Management
-POST /regions — Create region
+GET /websites: List all websites
 
-GET /regions — List all regions
+GET /websites/:id: Get website details
 
-📊 Monitoring
-GET /monitor — Latest status of all websites
+PATCH /websites/:id: Update a website URL or name
 
-GET /monitor/:id?days=1&region=europe — Time-series data for a website
+DELETE /websites/:id: Remove a website
 
-GET /monitor/:id/downtime — Downtime history
+Regions
 
-GET /monitor/:id/last_downtime — Last downtime event
+POST /regions: Add a regionPayload: { "name": "europe" }
+
+GET /regions: List all regions
+
+Monitoring
+
+GET /monitor: List websites with latest monitoring status
+
+GET /monitor/:id?days=1&region=europe: Time-series data (response times)
+
+GET /monitor/:id/downtime?region=europe&days=1: Downtime data
+
+GET /monitor/:id/last_downtime?region=europe&days=1: Last downtime event (or null if none)
+
+📊 Dashboard UI Ideas
+
+When a user clicks on a website:
+
+Show Uptime Status:
+
+Calculate time since last downtime (API: /monitor/:id/last_downtime)
+
+Display duration in days, hours, minutes
+
+Draw Time Series Chart:
+
+X-axis: Timestamp
+
+Y-axis: Response Time in ms
+
+Two Data Lines:
+
+Response Times (from /monitor/:id?days=n&region=...)
+
+Downtime Events (from /monitor/:id/downtime?...)
+
+Downtime Summary Panel:
+
+Total downtimes
+
+Time & region of each downtime event
+
+Exact timestamps from downtime API response
+
+📅 Example API Usage with Axios
+
+// Add Website
+axios.post('http://localhost:3002/websites', {
+  url: 'https://google.com',
+  name: 'google'
+});
+
+// Get All Websites
+axios.get('http://localhost:3002/websites');
+
+// Update Website
+axios.patch('http://localhost:3002/websites/:id', {
+  url: 'https://new-url.com'
+});
+
+// Delete Website
+axios.delete('http://localhost:3002/websites/:id');
+
+🚧 Final Notes
+
+Backend is fully complete ✔
+
+Monitor millions of sites across global regions ✔
+
+Extendable for SMS/Slack/PagerDuty in future ✔
+
+Perfect base to build a UI like BetterUptime ✔
+
+Built with love in Rust ❤️ by Pankaj.

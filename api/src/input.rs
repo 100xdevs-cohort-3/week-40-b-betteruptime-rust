@@ -1,4 +1,3 @@
-use influxdb2::FromDataPoint;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize)]
@@ -6,6 +5,12 @@ pub struct CreateWebsite {
     pub url: String,
     pub name: Option<String>,
     pub email: Option<String>,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct Website {
+    pub url: String,
+    pub name: Option<String>,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -26,12 +31,23 @@ pub struct TickQuery {
     pub region: Option<String>,
 }
 
-#[derive(Serialize, Deserialize, FromDataPoint, Default, Debug)]
-pub struct WebsiteStatus {
-    pub id: String,
-    pub response_time_ms: f64,
-    pub status: String,
-    pub region_id: String,
-    pub website_id: String,
-    pub timestamp: i64,
+// Simplified response structure for frontend - only time and value
+#[derive(Serialize, Deserialize, Debug)]
+pub struct TimeSeriesPoint {
+    pub time: String,
+    pub value: f64,
+}
+
+// Configuration struct for InfluxDB
+#[derive(Clone)]
+pub struct InfluxConfig {
+    pub url: String,
+    pub token: String,
+    pub org: String,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct LastDowntime {
+    pub time: String,
+    pub value: f64,
 }

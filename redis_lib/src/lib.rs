@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use redis::{
     AsyncCommands, Client,
     streams::{StreamMaxlen, StreamReadOptions, StreamReadReply},
@@ -6,7 +8,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone)]
 pub struct RedisStore {
-    client: Client,
+    client: Arc<Client>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -30,7 +32,9 @@ type BoxError = Box<dyn std::error::Error + Send + Sync>;
 impl RedisStore {
     pub async fn new(redis_url: &str) -> Result<Self, BoxError> {
         let client = Client::open(redis_url)?;
-        Ok(RedisStore { client })
+        Ok(RedisStore {
+            client: Arc::new(client),
+        })
     }
 
     pub async fn add_website_to_stream(
@@ -171,5 +175,24 @@ impl RedisStore {
             .xtrim("website_stream", StreamMaxlen::Equals(max_len))
             .await?;
         Ok(trimmed_count)
+    }
+
+    pub async fn set_emails_for_url(&self, url: &str, emails: Vec<String>) -> Result<(), BoxError> {
+        let mut conn = self.client.get_multiplexed_async_connection().await?;
+        let serialized = serde_json::to_string(&emails)?;
+        let _: () = conn.hset("website_emails", url, serialized).await?;
+        Ok(())
+    }
+
+    pub async fn get_emails_for_url(&self, url: &str) -> Result<Vec<String>, BoxError> {
+        let mut conn = self.client.get_multiplexed_async_connection().await?;
+        let result: Option<String> = conn.hget("website_emails", url).await?;
+        match result {
+            Some(serialized) => {
+                let emails: Vec<String> = serde_json::from_str(&serialized)?;
+                Ok(emails)
+            }
+            None => Ok(Vec::new()),
+        }
     }
 }

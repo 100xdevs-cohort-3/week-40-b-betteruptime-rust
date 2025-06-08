@@ -1,0 +1,16 @@
+influxdb v1 raw data sample
+{"results":[{"statement_id":0,"series":[{"name":"website_tick","columns":["time","region_id","response_time_ms","status","website_id"],"values":[["2025-06-08T09:49:50.318Z","europe",2002,"Up","e6728a25-30f3-4c19-bf47-1b0147a86660"]]}]}]}
+
+
+------------------
+influxdb v2 raw data sample without reqwest
+
+[FluxRecord { table: 0, values: {"_field": String("response_time_ms"), "_measurement": String("website_tick"), "_start": TimeRFC(2025-06-07T09:51:12.832956006+00:00), "_stop": TimeRFC(2025-06-08T09:51:12.832956006+00:00), "_time": TimeRFC(2025-06-08T09:49:50.318+00:00), "_value": Long(2002), "region_id": String("europe"), "result": String("_result"), "status": String("Up"), "table": Long(0), "website_id": String("e6728a25-30f3-4c19-bf47-1b0147a86660")} }]
+
+
+
+--------------------------
+influxdb v2 raw data sample with reqwest (CSV formate)
+
+,result,table,_start,_stop,_time,_value,_field,_measurement,region_id,status,website_id
+,_result,0,2025-06-07T09:53:42.923024967Z,2025-06-08T09:53:42.923024967Z,2025-06-08T09:49:50.318Z,2002,response_time_ms,website_tick,europe,Up,e6728a25-30f3-4c19-bf47-1b0147a86660

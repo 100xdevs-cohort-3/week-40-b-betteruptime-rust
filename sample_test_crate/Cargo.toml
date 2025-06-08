@@ -1,0 +1,27 @@
+[package]
+name = "sample_test_crate"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+
+
+# chrono = "0.4.41"
+# influxdb2 = "0.5.2"
+# influxdb2-structmap = "0.2.0"
+# num-traits = "0.2.19"
+#
+#
+# tokio = { version = "1.45.1", features = ["full"] }
+influxdb = { version = "0.7.2", features = ["derive"] }
+
+# influxdb2 = "0.5"
+# tokio = { version = "1.0", features = ["full"] }
+# chrono = { version = "0.4", features = ["serde"] }
+
+
+influxdb2 = "0.5"
+tokio = { version = "1.0", features = ["full"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+reqwest = { version = "0.11", features = ["json"] }

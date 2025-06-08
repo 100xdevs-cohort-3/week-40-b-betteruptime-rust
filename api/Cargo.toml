@@ -18,3 +18,4 @@ influxdb2-derive = "0.1.1"
 num-traits = "0.2"
 influxdb2-structmap = "0.2"
 anyhow = "1.0"
+reqwest = { version = "0.12.19", features = ["json"] }

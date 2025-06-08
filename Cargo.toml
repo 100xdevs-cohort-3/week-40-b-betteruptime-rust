@@ -4,7 +4,7 @@ members = [
     "api",
     "db_processor",
     "notification",
-    "redis_lib",
+    "redis_lib", "sample_test_crate",
     "store",
     "worker",
 ]

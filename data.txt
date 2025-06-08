@@ -101,3 +101,14 @@
 docker run -d -p 8086:8086 --name influxdb influxdb:latest
 
 docker run -d -p 6379:6379 redis
+
+Vly8MdPQtaGaV3m9Q3H-6FL1HIbOC7Mj75c40tQqAto_nFUeSE0msZPgF6uIfZ5dwEs25UFKvBD5bJ3a9DjStw==
+
+from(bucket: "website_ticks")
+  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
+  |> filter(fn: (r) => r["_measurement"] == "website_tick")
+  |> filter(fn: (r) => r["_field"] == "response_time_ms" or r["_field"] == "status")
+  |> filter(fn: (r) => r["region_id"] == "europe")
+  |> filter(fn: (r) => r["website_id"] == "e2f48340-b156-475c-846c-b1f1f484dec1")
+  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)
+  |> yield(name: "mean")

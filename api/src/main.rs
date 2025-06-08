@@ -1,10 +1,8 @@
 use std::sync::{Arc, Mutex};
 
 use poem::{
-    get, handler, listener::TcpListener, post, web::{Data, Json, Path}, EndpointExt, Route, Server
+    get, listener::TcpListener, post, EndpointExt, Route, Server
 };
-use request_inputs::{CreateUserInput, CreateWebsiteInput};
-use request_outputs::{CreateUserOutput, CreateWebsiteOutput, GetWebsiteOutput, SigninOutput};
 use routes::{user::{sign_in, sign_up}, website::{create_website, get_website}};
 use store::store::Store;
 pub mod request_inputs;

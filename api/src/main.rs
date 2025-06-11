@@ -1,9 +1,10 @@
 use std::sync::{Arc, Mutex};
 
-use poem::{
-    get, listener::TcpListener, post, EndpointExt, Route, Server
+use poem::{EndpointExt, Route, Server, get, listener::TcpListener, post};
+use routes::{
+    user::{sign_in, sign_up},
+    website::{create_website, get_website},
 };
-use routes::{user::{sign_in, sign_up}, website::{create_website, get_website}};
 use store::store::Store;
 pub mod request_inputs;
 pub mod request_outputs;
@@ -19,7 +20,7 @@ async fn main() -> Result<(), std::io::Error> {
         .at("/user/signin", post(sign_in))
         .data(s);
     // creates and runs the http server
-    Server::new(TcpListener::bind("0.0.0.0:3000"))
+    Server::new(TcpListener::bind("0.0.0.0:8080"))
         .name("hello-world")
         .run(app)
         .await

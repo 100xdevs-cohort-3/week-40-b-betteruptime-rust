@@ -1,0 +1,10 @@
+FROM rustlang/rust:nightly
+RUN cargo install diesel_cli --no-default-features --features postgres
+
+WORKDIR /app
+COPY store ./store
+
+# Change to store directory where diesel.toml is located
+WORKDIR /app/store
+
+CMD ["diesel", "migration", "run"]
